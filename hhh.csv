@@ -1,0 +1,425 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+html, body {
+  margin: 0; padding: 0;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(135deg, #fddde6 0%, #f5c0c0 100%);
+  font-family: 'Poppins', sans-serif;
+  color: #4a1c26;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  overflow: hidden;
+  touch-action: none;
+  overscroll-behavior: contain;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+#background-hearts {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.heart {
+  position: absolute;
+  font-size: 24px;
+  color: #f25757cc;
+  animation: floatUp linear infinite;
+  user-select: none;
+}
+@keyframes floatUp {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-150%);
+  }
+}
+#book-container {
+  position: relative;
+  width: 90vw;
+  max-width: 450px;
+  aspect-ratio: 9 / 16;
+  perspective: 2200px;
+  background: rgba(255 255 255 / 0.95);
+  border-radius: 24px;
+  box-shadow: 0 16px 40px rgba(74, 28, 38, 0.25);
+  overflow: visible;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+#pages {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  touch-action: none;
+  user-select: none;
+}
+.page {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0; left: 0;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(230, 100, 101, 0.2);
+  padding: 28px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  transition: transform 0.75s ease;
+  box-sizing: border-box;
+  overflow: hidden;
+  user-select: text;
+}
+.page img {
+  max-width: 100%;
+  max-height: 50%;
+  margin-top: 16px;
+  border-radius: 16px;
+  object-fit: cover;
+  box-shadow: 0 8px 24px rgba(230, 100, 101, 0.36);
+  pointer-events: none;
+  user-select: none;
+  transition: transform 0.3s ease;
+}
+.page.front {
+  transform: rotateY(0deg);
+  z-index: 20;
+}
+.page.back {
+  transform: rotateY(-180deg);
+  z-index: 10;
+}
+.lyric-text {
+  margin-top: 8px;
+  font-weight: 700;
+  font-size: 1.4rem;
+  line-height: 1.3;
+  text-align: center;
+  color: transparent;
+  background: linear-gradient(135deg, #a23e71, #e66465, #f2a365);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.heart-icon {
+  font-size: 40px;
+  color: #e85d75;
+  animation: beat 1.5s infinite;
+  user-select: none;
+  pointer-events: none;
+}
+@keyframes beat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+#nav-controls {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  z-index: 20;
+  user-select: none;
+}
+button.nav-btn {
+  background: linear-gradient(135deg, #c96a87, #e66465);
+  border: none;
+  border-radius: 12px;
+  padding: 10px 28px;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(230, 100, 101, 0.5);
+  position: relative;
+  perspective: 600px;
+  outline-offset: 3px;
+  outline: transparent solid 2px;
+  transition: outline-color 0.3s ease;
+}
+button.nav-btn:focus {
+  outline-color: #e66465;
+}
+button.nav-btn:disabled {
+  background: #f0c6c8;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+button.nav-btn:active .page-turn-icon {
+  animation: pageTurnBtn 0.4s ease forwards;
+}
+@keyframes pageTurnBtn {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(45deg);
+  }
+}
+.page-turn-icon {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 1.2rem;
+  vertical-align: middle;
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease;
+}
+</style>
+</head>
+<body>
+
+<div id="background-hearts" aria-hidden="true"></div>
+
+<div>
+  <div id="book-container" role="region" aria-label="Scrapbook romantis dengan efek buka buku">
+    <div id="pages" aria-live="polite" aria-atomic="true" aria-relevant="additions removals"></div>
+  </div>
+
+  <div id="nav-controls" aria-label="Navigasi halaman scrapbook">
+    <button id="prevBtn" class="nav-btn" aria-label="Halaman sebelumnya" disabled>
+      Sebelumnya
+      <span class="page-turn-icon">❮</span>
+    </button>
+    <button id="nextBtn" class="nav-btn" aria-label="Halaman berikutnya">
+      Berikutnya
+      <span class="page-turn-icon">❯</span>
+    </button>
+  </div>
+</div>
+
+<audio id="bg-music" preload="auto" loop style="display:none" crossorigin="anonymous">
+  <source src="https://cdn.pixabay.com/download/audio/2022/05/13/audio_3b4501a0a9.mp3?filename=romantic-instrumental-love-music-6153.mp3" type="audio/mpeg" />
+</audio>
+
+<script>
+(() => {
+  const lyrics = [
+    "Tiba-tiba aku jatuh cinta",
+    "Diam-diam kau pun juga cinta",
+    "Kita berdua belum punya kekasih",
+    "Saling mendekati",
+    "Perasaan tak bisa berdusta",
+    "Bahagia terasa sempurna",
+    "Kita berdua belum punya kekasih",
+    "Tunggu apa lagi",
+    "Katakan cinta bila kau cinta",
+    "Hati ini meminta",
+    "Kau lebih dari teman berbagi",
+    "Jadi kekasihku saja"
+  ];
+  const images = [
+    "https://i.ibb.co/j9Mskt7k/Whats-App-Image-2025-06-17-at-21-32-53-a2847b1c.jpg",
+    "https://i.ibb.co/WWYtknYC/Whats-App-Image-2025-06-17-at-21-32-54-8db75719.jpg",
+    "https://i.ibb.co/LddbNfKr/Gambar-Whats-App-2025-06-16-pada-07-32-58-e4f3f2f1.jpg",
+    "https://i.ibb.co/kgwvjp4k/Gambar-WhatsApp-2025-06-16-pukul-07-30-07-52fad8de.jpg",
+    "https://i.ibb.co/xSYS4KFd/Gambar-WhatsApp-2025-06-16-pukul-07-19-16-a8694ed8.jpg",
+    "https://i.ibb.co/RGqV9P67/Gambar-WhatsApp-2025-05-24-pukul-08-55-55-ec205e17.jpg",
+    "https://i.ibb.co/snKcnkd/Gambar-Whats-App-2025-05-24-pukul-08-45-27-a57dbc52.jpg",
+    "https://i.ibb.co/s90X1DQd/Gambar-Whats-App-2025-05-24-pukul-00-22-02-14466396.jpg",
+    "https://i.ibb.co/4n2NBjNp/Gambar-Whats-App-2025-05-22-pukul-11-18-52-550f518f.jpg",
+    "https://i.ibb.co/V0wYc27s/Gambar-Whats-App-2025-05-21-pukul-15-54-46-1ad8c462.jpg",
+    "https://i.ibb.co/RpdRhLf1/Whats-App-Image-2025-05-17-at-23-13-02-2025065a.jpg",
+    "https://i.ibb.co/d4qswqyp/Whats-App-Image-2025-05-13-at-09-51-41-0bdfed1e.jpg"
+  ];
+
+  const pagesContainer = document.getElementById('pages');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const bgMusic = document.getElementById('bg-music');
+
+  let currentIndex = 0;
+  let isAnimating = false;
+
+  function createPage(index) {
+    const page = document.createElement('article');
+    page.classList.add('page');
+    page.setAttribute('role', 'group');
+    page.setAttribute('aria-label', `Halaman ${index + 1} dari ${lyrics.length}`);
+
+    if (index <= currentIndex) {
+      page.classList.add('front');
+      page.style.transform = 'rotateY(0deg)';
+    } else {
+      page.classList.add('back');
+      page.style.transform = 'rotateY(-180deg)';
+    }
+
+    const imageSrc = images[index % images.length];
+
+    page.innerHTML = `
+      <div class="heart-icon" aria-hidden="true">❤</div>
+      <div class="lyric-text">${lyrics[index]}</div>
+      <img src="${imageSrc}" alt="Foto halaman ${index + 1}" loading="lazy" />
+    `;
+    return page;
+  }
+
+  function renderPages() {
+    pagesContainer.innerHTML = '';
+    for (let i = 0; i < lyrics.length; i++) {
+      pagesContainer.appendChild(createPage(i));
+    }
+  }
+
+  function updateNavButtons() {
+    prevBtn.disabled = currentIndex === 0;
+    nextBtn.disabled = currentIndex === lyrics.length - 1;
+  }
+
+  function flipToNext() {
+    if (isAnimating || currentIndex >= lyrics.length - 1) return;
+    isAnimating = true;
+
+    const currentPage = pagesContainer.children[currentIndex];
+    const nextPage = pagesContainer.children[currentIndex + 1];
+
+    currentPage.style.zIndex = 30;
+    nextPage.style.zIndex = 40;
+
+    currentPage.style.transition = 'transform 0.7s ease-out';
+    currentPage.style.transform = 'rotateY(-180deg)';
+
+    nextPage.style.transition = 'transform 0.7s ease-out';
+    nextPage.style.transform = 'rotateY(0deg)';
+
+    currentPage.addEventListener('transitionend', function onNextEnd() {
+      currentPage.removeEventListener('transitionend', onNextEnd);
+      currentPage.classList.remove('front');
+      currentPage.classList.add('back');
+      nextPage.classList.remove('back');
+      nextPage.classList.add('front');
+
+      currentPage.style.transition = '';
+      nextPage.style.transition = '';
+      currentPage.style.zIndex = '';
+      nextPage.style.zIndex = '';
+
+      currentIndex++;
+      updateNavButtons();
+      isAnimating = false;
+    });
+  }
+
+  function flipToPrev() {
+    if (isAnimating || currentIndex === 0) return;
+    isAnimating = true;
+
+    const currentPage = pagesContainer.children[currentIndex];
+    const prevPage = pagesContainer.children[currentIndex - 1];
+
+    currentPage.style.zIndex = 40;
+    prevPage.style.zIndex = 30;
+
+    currentPage.style.transition = 'transform 0.7s ease-out';
+    currentPage.style.transform = 'rotateY(180deg)';
+
+    prevPage.style.transition = 'transform 0.7s ease-out';
+    prevPage.style.transform = 'rotateY(0deg)';
+
+    currentPage.addEventListener('transitionend', function onPrevEnd() {
+      currentPage.removeEventListener('transitionend', onPrevEnd);
+      currentPage.classList.remove('front');
+      currentPage.classList.add('back');
+      prevPage.classList.remove('back');
+      prevPage.classList.add('front');
+
+      currentPage.style.transition = '';
+      prevPage.style.transition = '';
+      currentPage.style.zIndex = '';
+      prevPage.style.zIndex = '';
+
+      currentIndex--;
+      updateNavButtons();
+      isAnimating = false;
+    });
+  }
+
+  let startX = null;
+  let isDragging = false;
+  function onStart(e) {
+    if (isAnimating) return;
+    isDragging = true;
+    startX = e.touches ? e.touches[0].clientX : e.clientX;
+  }
+  function onMove(e) {
+    if (!isDragging) return;
+  }
+  function onEnd(e) {
+    if (!isDragging) return;
+    isDragging = false;
+    const endX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
+    const deltaX = endX - startX;
+    const threshold = 40;
+    if (deltaX < -threshold) flipToNext();
+    else if (deltaX > threshold) flipToPrev();
+    startX = null;
+  }
+
+  renderPages();
+  updateNavButtons();
+
+  prevBtn.addEventListener('click', flipToPrev);
+  nextBtn.addEventListener('click', flipToNext);
+
+  const pagesEl = pagesContainer;
+  pagesEl.addEventListener('touchstart', onStart, {passive:true});
+  pagesEl.addEventListener('touchmove', onMove, {passive:true});
+  pagesEl.addEventListener('touchend', onEnd, {passive:true});
+  pagesEl.addEventListener('mousedown', onStart);
+  pagesEl.addEventListener('mousemove', onMove);
+  pagesEl.addEventListener('mouseup', onEnd);
+  pagesEl.addEventListener('mouseleave', () => { isDragging = false; startX = null; });
+
+
+  // Play background music on first user interaction
+  const bgMusic = document.getElementById('bg-music');
+  function tryPlayAudio() {
+    if(bgMusic.paused) {
+      bgMusic.play().catch(() => {});
+    }
+    window.removeEventListener('click', tryPlayAudio);
+    window.removeEventListener('touchstart', tryPlayAudio);
+  }
+  window.addEventListener('click', tryPlayAudio);
+  window.addEventListener('touchstart', tryPlayAudio);
+
+  // Floating hearts background
+  const bgHearts = document.getElementById('background-hearts');
+  function createHeart() {
+    const heart = document.createElement('div');
+    heart.className = 'heart';
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.style.animationDuration = (4 + Math.random() * 3) + 's';
+    heart.style.fontSize = (12 + Math.random() * 24) + 'px';
+    heart.textContent = '❤';
+    bgHearts.appendChild(heart);
+    setTimeout(() => heart.remove(), 7000);
+  }
+  setInterval(createHeart, 600);
+})();
+</script>
+
+</body>
+</html>
