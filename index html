@@ -1,0 +1,22 @@
+    <div id="nav-controls" aria-label="Navigasi halaman scrapbook">
+      <button id="prevBtn" class="nav-btn" aria-label="Halaman sebelumnya" disabled>
+        Sebelumnya
+        <span class="page-turn-icon">❮</span>
+      </button>
+      <button id="nextBtn" class="nav-btn" aria-label="Halaman berikutnya">
+        Berikutnya
+        <span class="page-turn-icon">❯</span>
+      </button>
+    </div>
+  </div>
+  <audio id="bg-music" preload="auto" loop style="display:none" crossorigin="anonymous">
+    <source src="https://cdn.pixabay.com/download/audio/2022/05/13/audio_3b4501a0a9.mp3?filename=romantic-instrumental-love-music-6153.mp3" type="audio/mpeg" />
+  </audio>
+  <div id="yt-bg-music" aria-hidden="true" style="display:none">
+    <iframe id="ytplayer" type="text/html" width="1" height="1"
+      src="https://www.youtube.com/embed/zt4NeGqnCOk?autoplay=1&loop=1&mute=1&controls=0&playlist=zt4NeGqnCOk&modestbranding=1&rel=0&showinfo=0&enablejsapi=1"
+      frameborder="0" allow="autoplay" allowfullscreen></iframe>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
